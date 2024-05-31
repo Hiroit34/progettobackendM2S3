@@ -21,11 +21,11 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Username is mandatory")
-    @Size(min = 3, max = 10, message = "Username must be between 4 and 20 characters")
+    @Size(min = 3, max = 10, message = "Username must be between 3 and 10 characters")
     private String username;
 
     @NotBlank(message = "Password is mandatory")
-    @Size(min = 8, max = 15, message = "Password must be between 8 and 15 characters")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

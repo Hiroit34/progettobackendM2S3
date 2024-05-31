@@ -3,6 +3,7 @@ package com.progettofinalejava.progettofinale.service;
 import com.progettofinalejava.progettofinale.dto.UserDTO;
 import com.progettofinalejava.progettofinale.entity.User;
 import com.progettofinalejava.progettofinale.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,10 +23,14 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserDTO saveUser(UserDTO userDTO) {
-        // Creazione diretta dell'istanza User utilizzando i dati del DTO
-
+    public UserDTO saveUser(@Valid UserDTO userDTO) {
         System.out.println("Received userDTO: " + userDTO);
+
+        // Log the password length for debugging
+        if (userDTO.getPassword() != null) {
+            System.out.println("Password length: " + userDTO.getPassword().length());
+        }
+
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -33,15 +38,11 @@ public class UserService implements UserDetailsService {
         System.out.println("Saving user with username: " + user.getUsername());
         System.out.println("Saving user with password: " + user.getPassword());
 
-        // Salva l'utente nel repository
         user = userRepository.save(user);
 
-        // Converti l'utente salvato in DTO e restituiscilo
         UserDTO savedUserDTO = new UserDTO();
         savedUserDTO.setUsername(user.getUsername());
-        savedUserDTO.setPassword(null); // Non restituire la password
-
-
+        savedUserDTO.setPassword(null); // Do not return the password
 
         return savedUserDTO;
     }
@@ -52,10 +53,9 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        // Converti l'utente trovato in DTO
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(user.getUsername());
-        userDTO.setPassword(null); // Non restituire la password
+        userDTO.setPassword(null); // Do not return the password
 
         return userDTO;
     }
@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
                 .map(user -> {
                     UserDTO userDTO = new UserDTO();
                     userDTO.setUsername(user.getUsername());
-                    userDTO.setPassword(null); // Non restituire la password
+                    userDTO.setPassword(null); // Do not return the password
                     return userDTO;
                 })
                 .collect(Collectors.toList());
