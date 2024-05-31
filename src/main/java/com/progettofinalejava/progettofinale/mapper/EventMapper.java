@@ -1,7 +1,8 @@
 package com.progettofinalejava.progettofinale.mapper;
 
+import com.progettofinalejava.progettofinale.dto.EventDTO;
 import com.progettofinalejava.progettofinale.entity.Event;
-import com.example.demo.dto.EventDTO;
+
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
